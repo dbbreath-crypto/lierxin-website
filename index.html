@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LIERXIN 利尔鑫 — 高端PCB/PCBA一站式智造专家</title>
+    <meta name="description" content="深圳利尔鑫实业有限公司 — 集PCB线路板制造、PCBA贴装组装及电子产品方案研发于一体，四大生产基地，月产能60万平米，3500人专业团队，服务VinFast、蔚来、吉利威睿等全球客户，72小时交付。">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <script>
+        // 主题预加载：避免刷新时闪现深色
+        (function () {
+            try {
+                if (localStorage.getItem('lierxin-theme') === 'light') {
+                    document.documentElement.setAttribute('data-theme', 'light');
+                }
+            } catch (e) {}
+        })();
+    </script>
+</head>
+<body>
+    <!-- Subtle background texture -->
+    <div class="bg-texture"></div>
+
+    <!-- Navigation -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#/" class="nav-logo">
+                <div class="logo-mark">
+                    <img src="images/logo.png" alt="LIERXIN 利尔鑫" class="logo-img">
+                </div>
+                <div class="logo-text">
+                    <span class="logo-en">LIERXIN</span>
+                    <span class="logo-cn">利尔鑫</span>
+                </div>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="#/" class="nav-link" data-page="home">首页</a></li>
+                <li><a href="#/products" class="nav-link" data-page="products">产品中心</a></li>
+                <li><a href="#/solutions" class="nav-link" data-page="solutions">行业方案</a></li>
+                <li><a href="#/about" class="nav-link" data-page="about">关于我们</a></li>
+                <li><a href="#/news" class="nav-link" data-page="news">资讯中心</a></li>
+                <li><a href="#/contact" class="nav-link" data-page="contact">联系我们</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换深浅色主题" title="切换深浅色主题">
+                    <svg class="tt-icon tt-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                    <svg class="tt-icon tt-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"/>
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+                    </svg>
+                </button>
+                <a href="#/contact" class="nav-cta">获取报价</a>
+                <button class="nav-toggle" id="navToggle" aria-label="菜单">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Page content container -->
+    <main class="page-container" id="app"></main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-container">
+            <div class="footer-grid">
+                <div class="footer-col footer-brand">
+                    <div class="footer-logo">
+                        <img src="images/logo.png" alt="LIERXIN 利尔鑫" class="footer-logo-img">
+                        <span>利尔鑫</span>
+                    </div>
+                    <p class="footer-desc">国家高新技术企业，集PCB线路板制造、PCBA贴装组装及电子产品方案研发于一体，致力于为全球客户提供从概念设计到批量交付的一站式ODM/OEM定制解决方案。</p>
+                    <div class="footer-cert">
+                        <span class="cert-badge">ISO 9001</span>
+                        <span class="cert-badge">IATF 16949</span>
+                        <span class="cert-badge">ISO 13485</span>
+                        <span class="cert-badge">国家高新企业</span>
+                        <span class="cert-badge">绿色工厂</span>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>产品中心</h4>
+                    <ul>
+                        <li><a href="#/products">HDI线路板</a></li>
+                        <li><a href="#/products">多层PCB板</a></li>
+                        <li><a href="#/products">PCBA贴装组装</a></li>
+                        <li><a href="#/products">软硬结合板</a></li>
+                        <li><a href="#/products">高频高速板</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>行业方案</h4>
+                    <ul>
+                        <li><a href="#/solutions">汽车电子</a></li>
+                        <li><a href="#/solutions">通讯设备</a></li>
+                        <li><a href="#/solutions">工业控制</a></li>
+                        <li><a href="#/solutions">医疗电子</a></li>
+                        <li><a href="#/solutions">消费电子</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col">
+                    <h4>关于我们</h4>
+                    <ul>
+                        <li><a href="#/about">公司简介</a></li>
+                        <li><a href="#/news">资讯中心</a></li>
+                        <li><a href="#/contact">联系我们</a></li>
+                    </ul>
+                </div>
+                <div class="footer-col footer-contact">
+                    <h4>联系方式</h4>
+                    <ul class="contact-list">
+                        <li><span class="ci-label">电话</span> 191 6877 4494</li>
+                        <li><span class="ci-label">邮箱</span> selina@szlierpcb.com</li>
+                        <li><span class="ci-label">地址</span> 深圳市宝安区新桥街道新二社区南岭路23号</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>© 2024 深圳利尔鑫实业有限公司 Shenzhen Lerxin Industrial Co., Ltd. 版权所有</p>
+                <p class="footer-icp">粤ICP备2024XXXXXX号</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Scroll to top -->
+    <button class="scroll-top" id="scrollTop" aria-label="返回顶部">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 4l6 6-1.5 1.5L11 7.5V16H9V7.5L5.5 11L4 9.5l6-6z" fill="currentColor"/>
+        </svg>
+    </button>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
