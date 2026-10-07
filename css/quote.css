@@ -1,0 +1,146 @@
+/* ============================================
+   在线报价系统（独立页 quote.html）
+   复用主站 style.css 的变量、主题与标准导航/页脚
+   ============================================ */
+
+/* ---- Hero ---- */
+.q-hero {
+    padding: 72px 24px 56px;
+    background:
+        linear-gradient(180deg, rgba(var(--scrim-rgb), 0.55), rgba(var(--scrim-rgb), 0.85)),
+        url('../images/products-hero.jpg') center / cover no-repeat;
+    border-bottom: 1px solid var(--border);
+    text-align: center;
+}
+.q-hero-inner { max-width: 820px; margin: 0 auto; }
+.q-hero .eyebrow {
+    font-size: 12px; letter-spacing: 4px; color: var(--gold); margin-bottom: 14px;
+}
+.q-hero h1 {
+    font-family: var(--font-serif); font-size: 42px; font-weight: 700;
+    color: #fff; margin-bottom: 16px; letter-spacing: 1px;
+}
+.q-hero p { color: rgba(255, 255, 255, 0.78); font-size: 15px; line-height: 1.8; }
+
+/* ---- 布局 ---- */
+/* 顶部导航是 fixed，这里为内容留出导航高度 */
+.q-main { padding-top: var(--nav-height); padding-bottom: 60px; }
+.q-layout {
+    max-width: 1240px; margin: -36px auto 0; padding: 0 24px;
+    display: grid; grid-template-columns: minmax(0, 1fr) 360px; gap: 24px; align-items: start;
+}
+
+/* ---- 卡片 ---- */
+.q-card {
+    background: var(--bg-card); border: 1px solid var(--border);
+    border-radius: var(--radius); padding: 26px 26px 28px; margin-bottom: 20px;
+}
+.q-card-head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; }
+.q-step {
+    font-size: 13px; font-weight: 700; letter-spacing: 1px; color: var(--gold);
+    border: 1px solid var(--border-gold); border-radius: 8px; padding: 6px 10px;
+}
+.q-card-head h2 { font-family: var(--font-serif); font-size: 19px; font-weight: 600; color: var(--text-primary); }
+
+.q-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 18px; }
+.q-field { display: flex; flex-direction: column; gap: 8px; }
+.q-field-full { grid-column: 1 / -1; }
+.q-field label { font-size: 13px; color: var(--text-secondary); }
+.q-unit { color: var(--text-muted); font-size: 12px; }
+.q-input {
+    width: 100%; padding: 11px 13px;
+    background: var(--bg-surface); color: var(--text-primary);
+    border: 1px solid var(--border); border-radius: 8px;
+    font-family: var(--font-sans); font-size: 14px;
+    transition: border-color var(--t-fast);
+}
+.q-input:focus { outline: none; border-color: var(--border-gold-bright); }
+.q-textarea { min-height: 92px; resize: vertical; line-height: 1.7; }
+select.q-input { cursor: pointer; }
+
+.q-checks { display: flex; flex-wrap: wrap; gap: 10px; }
+.q-check {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 9px 14px; border: 1px solid var(--border); border-radius: 8px;
+    background: var(--bg-surface); font-size: 13px; color: var(--text-secondary); cursor: pointer;
+    transition: all var(--t-fast);
+}
+.q-check:hover { border-color: var(--border-gold); color: var(--text-primary); }
+.q-check input { accent-color: var(--gold); }
+
+.q-captcha { display: flex; gap: 12px; align-items: center; }
+.q-captcha .q-input { flex: 1; }
+.q-captcha img {
+    height: 42px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer; background: var(--bg-surface);
+}
+
+.q-submit {
+    width: 100%; padding: 14px; border: none; border-radius: 10px;
+    background: var(--grad-gold); color: #10131c;
+    font-size: 15px; font-weight: 700; letter-spacing: 1px; cursor: pointer;
+    transition: filter var(--t-fast), transform var(--t-fast);
+}
+.q-submit:hover { filter: brightness(1.08); transform: translateY(-2px); }
+.q-submit:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+.q-status { margin-top: 12px; font-size: 13px; min-height: 20px; }
+.q-status.is-ok { color: #4ade80; }
+.q-status.is-error { color: #f87171; }
+.q-tip { margin-top: 10px; font-size: 12px; color: var(--text-muted); line-height: 1.7; }
+
+/* ---- 价格明细 ---- */
+.q-summary { position: sticky; top: calc(var(--nav-height) + 16px); }
+.q-summary-card {
+    background: var(--bg-card); border: 1px solid var(--border-gold);
+    border-radius: var(--radius); padding: 24px;
+    box-shadow: var(--shadow-gold);
+}
+.q-summary-card h3 {
+    font-family: var(--font-serif); font-size: 17px; font-weight: 600;
+    color: var(--text-primary); margin-bottom: 18px;
+}
+.q-total { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; }
+.q-total-label { font-size: 13px; color: var(--text-secondary); }
+.q-total-value { color: var(--gold); font-size: 15px; }
+.q-total-value b { font-size: 30px; font-weight: 700; }
+.q-total-sub {
+    margin: 8px 0 18px; font-size: 12px; color: var(--text-muted);
+}
+.q-total-sub b { color: var(--text-secondary); font-weight: 600; }
+
+.q-lines { list-style: none; margin: 0 0 18px; padding: 0; border-top: 1px solid var(--border); }
+.q-lines li {
+    display: flex; justify-content: space-between; gap: 12px;
+    padding: 9px 0; border-bottom: 1px solid var(--border);
+    font-size: 13px; color: var(--text-secondary);
+}
+.q-lines li b { color: var(--text-primary); font-weight: 600; }
+
+.q-note {
+    font-size: 12px; line-height: 1.7; color: var(--text-muted);
+    background: var(--bg-surface); border-left: 2px solid var(--gold);
+    padding: 12px 14px; border-radius: 0 8px 8px 0; margin-bottom: 18px;
+}
+
+.q-actions { display: flex; flex-direction: column; gap: 10px; }
+.q-btn-primary, .q-btn-ghost {
+    text-align: center; padding: 12px; border-radius: 10px;
+    font-size: 14px; font-weight: 600; text-decoration: none; transition: all var(--t-fast);
+}
+.q-btn-primary { background: var(--grad-gold); color: #10131c; }
+.q-btn-primary:hover { filter: brightness(1.08); transform: translateY(-2px); }
+.q-btn-ghost { border: 1px solid var(--border-gold); color: var(--gold); }
+.q-btn-ghost:hover { background: rgba(201, 168, 106, 0.1); }
+
+/* ---- 响应式 ---- */
+@media (max-width: 980px) {
+    .q-layout { grid-template-columns: 1fr; }
+    .q-summary { position: static; }
+}
+@media (max-width: 720px) {
+    .q-hero { padding: 48px 18px 40px; }
+    .q-hero h1 { font-size: 28px; }
+    .q-layout { padding: 0 16px; margin-top: -24px; }
+    .q-card { padding: 20px 18px 22px; }
+    .q-grid { grid-template-columns: 1fr; }
+    .q-summary-card { padding: 20px 18px; }
+}

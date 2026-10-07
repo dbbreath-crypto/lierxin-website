@@ -8,7 +8,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/style.css?v=20260928">
     <script>
         // 主题预加载：避免刷新时闪现深色
         (function () {
@@ -54,7 +54,7 @@
                         <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
                     </svg>
                 </button>
-                <a href="#/contact" class="nav-cta">获取报价</a>
+                <a href="#/contact" class="nav-cta" id="navQuote">获取报价</a>
                 <button class="nav-toggle" id="navToggle" aria-label="菜单">
                     <span></span><span></span><span></span>
                 </button>
@@ -122,18 +122,24 @@
             </div>
             <div class="footer-bottom">
                 <p>© 2024 深圳利尔鑫实业有限公司 Shenzhen Lerxin Industrial Co., Ltd. 版权所有</p>
-                <p class="footer-icp">粤ICP备2024XXXXXX号</p>
+                <p class="footer-icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">粤ICP备2026146057号-1</a></p>
             </div>
         </div>
     </footer>
 
-    <!-- Scroll to top -->
-    <button class="scroll-top" id="scrollTop" aria-label="返回顶部">
-        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-            <path d="M10 4l6 6-1.5 1.5L11 7.5V16H9V7.5L5.5 11L4 9.5l6-6z" fill="currentColor"/>
-        </svg>
-    </button>
+    <!-- 右下角浮动操作：获取报价 + 返回顶部 -->
+    <div class="float-actions" id="floatActions">
+        <button class="float-quote" id="floatQuote" type="button" aria-label="获取报价">
+            <span>获取</span>
+            <span>报价</span>
+        </button>
+        <button class="scroll-top" id="scrollTop" aria-label="返回顶部">
+            <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M10 4l6 6-1.5 1.5L11 7.5V16H9V7.5L5.5 11L4 9.5l6-6z" fill="currentColor"/>
+            </svg>
+        </button>
+    </div>
 
-    <script src="js/app.js"></script>
+    <script src="js/app.js?v=20261007"></script>
 </body>
 </html>

@@ -107,9 +107,8 @@ function renderHome() {
                 <h2>核心<span class="text-gold">产品体系</span></h2>
                 <p>覆盖从常规多层板到高难度HDI、软硬结合板的全品类PCB/PCBA产品线</p>
             </div>
-            <div class="card-grid">
-                ${productsData.map(p => productCard(p)).join('')}
-            </div>
+            <div class="card-grid" id="homeProductsGrid">${productSkeleton(6)}</div>
+            <div class="news-empty" id="homeProductsEmpty" hidden></div>
         </section>
 
         <!-- Enterprise Stats -->
@@ -327,202 +326,79 @@ function renderHome() {
         </section>
     </div>`;
 }
+// ---- Product Cards（数据来自后台 api/products.php）----
+let productsLoadToken = 0;
 
-// ---- Product Data ----
-const productsData = [
-    {
-        id: 'hdi',
-        title: 'HDI线路板',
-        en: 'HDI BOARD',
-        shortDesc: '1-3阶任意层HDI高密度互连板，微孔高密度设计，满足智能终端、通信设备等小型化需求。',
-        features: ['任意层HDI', '微盲埋孔', '高密度布线'],
-        icon: 'chip',
-        detail: {
-            tag: 'HDI BOARD',
-            heading: 'HDI高密度互连线路板',
-            desc: '1-3阶任意层HDI板，采用激光微孔技术，实现更高密度的线路布局，满足智能手机、可穿戴设备等小型化、高性能需求。',
-            list: [
-                '1-3阶任意层HDI互连结构',
-                '激光微孔，最小孔径50μm',
-                '最小线宽线距 2/2mil',
-                '高密度布线，满足空间紧凑设计',
-                '适用于5G终端、智能穿戴、AI硬件等场景'
-            ],
-            specs: [
-                { value: '1-3阶', name: 'HDI阶数' },
-                { value: '50μm', name: '最小微孔径' },
-                { value: '2/2mil', name: '最小线宽/线距' },
-                { value: '任意层', name: '互连结构' },
-                { value: 'mSAP', name: '精细线路工艺' },
-                { value: '7-10天', name: '打样周期' }
-            ]
-        }
-    },
-    {
-        id: 'multilayer',
-        title: '多层PCB板',
-        en: 'MULTILAYER PCB',
-        shortDesc: '1-28层刚性多层印制电路板，工艺成熟稳定，覆盖汽车电子、工控、通信等各领域。',
-        features: ['1-28层', '高可靠性', '车规级品控'],
-        icon: 'layers',
-        detail: {
-            tag: 'MULTILAYER PCB',
-            heading: '多层印制电路板',
-            desc: '1-28层刚性多层PCB，覆盖双面多层、HDI、铝基板、铜基板、高频高速、金属基板全品类，广泛应用于汽车电子、工业控制、网络通讯、安防、医疗等领域。支持埋铜块、分级金手指、混压等特殊工艺。',
-            list: [
-                '1-28层刚性多层板，全规格覆盖',
-                '最小线宽线距 50/50μm，最大纵横比16:1',
-                '阻抗控制精度±8%，满足高信号完整性要求',
-                '板厚范围0.25-6.0mm，最大拼板600×860mm',
-                '执行IPC Class 2/3标准，生益、KB等知名基材'
-            ],
-            specs: [
-                { value: '1-28层', name: '板层范围' },
-                { value: '50/50μm', name: '最小线宽/线距' },
-                { value: '±8%', name: '阻抗控制精度' },
-                { value: '0.25-6.0mm', name: '板厚范围' },
-                { value: '16:1', name: '通孔纵横比' },
-                { value: 'IPC 2/3', name: '执行标准' }
-            ]
-        }
-    },
-    {
-        id: 'pcba',
-        title: 'PCBA贴装组装',
-        en: 'PCBA ASSEMBLY',
-        shortDesc: '20条SMT线+5条装配线+4条DIP线，从贴片到焊接、检测的全流程组装服务，支持ODM/OEM定制。',
-        features: ['20条SMT线', '全流程检测', '一站式服务'],
-        icon: 'assembly',
-        detail: {
-            tag: 'PCBA ASSEMBLY',
-            heading: 'PCBA贴装组装',
-            desc: 'PCBA基地位于深圳沙井，配备20条SMT线体、5条装配线、4条DIP线及4台波峰焊机，从贴片到焊接、检测的全流程组装服务，覆盖无人机、智能家居、汽车医疗、工控等应用领域。',
-            list: [
-                '20条SMT线体 + 5条装配线 + 4条DIP线',
-                '配备IPX7防水测试、震动测试、高压测试等可靠性试验设备',
-                '从BOM代采到整机功能测试端到端服务',
-                '支持ODM/OEM一站式定制方案',
-                '无人机类应用占比达43%，行业经验深厚'
-            ],
-            specs: [
-                { value: '20条', name: 'SMT线体' },
-                { value: '5条', name: '装配线' },
-                { value: '4条', name: 'DIP线' },
-                { value: '深圳沙井', name: '基地位置' },
-                { value: 'ODM/OEM', name: '定制模式' },
-                { value: '43%', name: '无人机应用占比' }
-            ]
-        }
-    },
-    {
-        id: 'rigid-flex',
-        title: '软硬结合板',
-        en: 'RIGID-FLEX PCB',
-        shortDesc: '柔性电路与刚性电路结合，实现三维空间布线，满足可穿戴、医疗等空间受限场景。',
-        features: ['三维布线', '轻量化', '高可靠性'],
-        icon: 'flex',
-        detail: {
-            tag: 'RIGID-FLEX PCB',
-            heading: '软硬结合板',
-            desc: '将柔性电路与刚性电路结合于一体，实现三维空间布线与折叠安装，满足可穿戴设备、医疗内窥镜、无人机等空间受限场景的高可靠性需求。',
-            list: [
-                '刚性与柔性电路一体化设计',
-                '三维空间布线，节省内部空间',
-                '优异的弯折耐久性与信号完整性',
-                '轻量化，满足终端小型化趋势',
-                '适用于医疗、消费电子、无人机等场景'
-            ],
-            specs: [
-                { value: '一体化', name: '刚柔结合' },
-                { value: '3D', name: '空间布线' },
-                { value: '10万次', name: '弯折耐久' },
-                { value: '多层', name: '柔性层' },
-                { value: 'PI', name: '基材类型' },
-                { value: '8-12天', name: '打样周期' }
-            ]
-        }
-    },
-    {
-        id: 'high-freq',
-        title: '高频高速板',
-        en: 'HIGH-FREQ PCB',
-        shortDesc: '高频高速材料混压工艺，适用于5G通信、汽车雷达等高频信号完整性要求场景。',
-        features: ['高频混压', '低损耗', '阻抗±8%'],
-        icon: 'wave',
-        detail: {
-            tag: 'HIGH-FREQ PCB',
-            heading: '高频高速板',
-            desc: '采用高频高速材料混压工艺，具备优异的高频电气性能，广泛应用于5G通信、汽车雷达、高速服务器等领域。支持HDI软硬结合、Anylayer HDI等先进结构。',
-            list: [
-                '高频高速材料混压工艺成熟',
-                '阻抗控制精度±8%，信号完整性保障',
-                '支持高速服务器板、Anylayer HDI结构',
-                '最小BGA间距0.40mm，高密度设计支持',
-                '适用于5G终端、雷达、高速传输场景'
-            ],
-            specs: [
-                { value: '±8%', name: '阻抗控制精度' },
-                { value: '混压', name: '工艺支持' },
-                { value: 'Anylayer', name: 'HDI结构' },
-                { value: '0.40mm', name: '最小BGA间距' },
-                { value: '0.05mm', name: '最小激光盲孔' },
-                { value: '5G/雷达', name: '适用领域' }
-            ]
-        }
-    },
-    {
-        id: 'special',
-        title: '特殊工艺板',
-        en: 'SPECIAL PCB',
-        shortDesc: '金属基板、厚铜板、埋铜块等特殊工艺定制，满足大功率与特殊应用需求。',
-        features: ['金属基板', '厚铜4-6oz', '埋铜块'],
-        icon: 'pcb',
-        detail: {
-            tag: 'SPECIAL PCB',
-            heading: '特殊工艺板',
-            desc: '提供金属基板（铝基板/铜基板/IMS）、厚铜板（4-6oz）、埋铜块、控深钻、背钻等特殊工艺定制产品，满足大功率电源、新能源BMS、汽车电驱等高散热、大电流应用场景的严苛需求。',
-            list: [
-                '金属基板：铝基板、铜基板、金属基板IMS',
-                '厚铜板：4-6oz厚铜箔，外层铜厚最高6oz',
-                '埋铜块、分级金手指、控深钻、背钻工艺',
-                '江西基地POFV/VIPPO工艺，服务海外客户',
-                '服务青山工业汽车电驱、吉利威睿BMS等客户'
-            ],
-            specs: [
-                { value: '4-6oz', name: '厚铜规格' },
-                { value: '铝/铜/IMS', name: '金属基板' },
-                { value: '6.0mm', name: '最大板厚' },
-                { value: '埋铜块', name: '特殊工艺' },
-                { value: '大功率', name: '适用场景' },
-                { value: '10年+', name: '产品寿命' }
-            ]
-        }
-    }
-];
+/** 产品卡片骨架屏 */
+function productSkeleton(n) {
+    return Array.from({ length: n }, () => `
+        <div class="tech-card is-loading">
+            <div class="card-visual skeleton-block"></div>
+            <div class="card-body">
+                <div class="skeleton-line" style="width:90px"></div>
+                <div class="skeleton-line" style="width:58%;height:18px"></div>
+                <div class="skeleton-line" style="width:100%"></div>
+                <div class="skeleton-line" style="width:82%"></div>
+            </div>
+        </div>`).join('');
+}
 
 function productCard(product) {
+    const cover = product.cover || 'images/products-hero.jpg';
+    const features = Array.isArray(product.features) ? product.features : [];
     return `
     <a href="#/products/${product.id}" class="tech-card">
-        <div class="card-visual" style="background-image:url('images/products/${product.id}.jpg')"></div>
+        <div class="card-visual" style="background-image:url('${escapeAttr(cover)}')"></div>
         <div class="card-body">
-            <div class="card-tag">${product.en}</div>
-            <h3 class="card-title">${product.title}</h3>
-            <p class="card-desc">${product.shortDesc}</p>
-            <div class="card-features">${product.features.map(f => `<span class="card-feature">${f}</span>`).join('')}</div>
+            <div class="card-tag">${escapeHtml(product.en || '')}</div>
+            <h3 class="card-title">${escapeHtml(product.title)}</h3>
+            <p class="card-desc">${escapeHtml(product.shortDesc || '')}</p>
+            <div class="card-features">${features.map(f => `<span class="card-feature">${escapeHtml(f)}</span>`).join('')}</div>
             <span class="card-link">查看详情 ${icons.arrow}</span>
         </div>
     </a>`;
 }
 
-function solutionCard(title, desc, img) {
-    return `
-    <div class="solution-card">
-        <div class="sol-visual">
-            <div class="sol-visual-img" style="background-image:url('images/solutions/${img}')"></div>
-        </div>
-        <h3>${title}</h3>
-        <p>${desc}</p>
-    </div>`;
+/** 拉取产品列表并渲染到指定容器（产品中心页 / 首页各一个） */
+async function loadProductsInto(gridId, emptyId, limit) {
+    const grid = document.getElementById(gridId);
+    if (!grid) return;
+
+    const token = ++productsLoadToken;
+    const emptyBox = emptyId ? document.getElementById(emptyId) : null;
+    if (emptyBox) emptyBox.hidden = true;
+
+    try {
+        const res = await fetch(`api/products.php?action=list&limit=${limit || 12}`);
+        const data = await res.json();
+        if (token !== productsLoadToken) return;
+        if (!document.body.contains(grid)) return;
+
+        if (!data.ok || !data.data.length) {
+            grid.innerHTML = '';
+            if (emptyBox) {
+                emptyBox.hidden = false;
+                emptyBox.textContent = data.message || '暂无产品';
+            }
+            return;
+        }
+        grid.innerHTML = data.data.map(productCard).join('');
+    } catch (err) {
+        if (token !== productsLoadToken) return;
+        grid.innerHTML = '';
+        if (emptyBox) {
+            emptyBox.hidden = false;
+            emptyBox.textContent = '产品加载失败，请稍后重试';
+        }
+    }
+}
+
+function loadProducts() {
+    loadProductsInto('productsGrid', 'productsEmpty', 24);
+}
+
+function loadHomeProducts() {
+    loadProductsInto('homeProductsGrid', 'homeProductsEmpty', 6);
 }
 
 // ---- Page: Products ----
@@ -536,9 +412,8 @@ function renderProducts() {
         </div>
 
         <section class="section" style="padding-top:60px">
-            <div class="card-grid">
-                ${productsData.map(p => productCard(p)).join('')}
-            </div>
+            <div class="card-grid" id="productsGrid">${productSkeleton(6)}</div>
+            <div class="news-empty" id="productsEmpty" hidden></div>
         </section>
 
         <!-- Production Capability -->
@@ -674,95 +549,164 @@ function renderProducts() {
 
 // ---- Page: Product Detail ----
 function renderProductDetail(id) {
-    const idx = productsData.findIndex(p => p.id === id);
-    if (idx === -1) return renderProducts();
-    const p = productsData[idx];
-    const d = p.detail;
-    const reverse = idx % 2 === 1;
-    const prevP = productsData[(idx - 1 + productsData.length) % productsData.length];
-    const nextP = productsData[(idx + 1) % productsData.length];
-
     return `
     <div class="page-enter">
-        <div class="product-hero" style="background-image:url('images/products-hero.jpg')">
-            <div class="eyebrow">${d.tag}</div>
-            <h1>${p.title}</h1>
-            <p>${d.desc}</p>
+        <div id="productRoot">
+            <div class="product-hero" style="background-image:url('images/products-hero.jpg')">
+                <div class="eyebrow">PRODUCT CENTER</div>
+                <h1>产品<span class="text-gold">中心</span></h1>
+            </div>
+            <section class="section">
+                <div class="card-grid">${productSkeleton(3)}</div>
+            </section>
         </div>
-
-        <div class="detail-nav">
-            <a href="#/products" class="back-link">${icons.arrow.replace('M3 8h10M9 4l4 4-4 4', 'M13 8H3M7 4L3 8l4 4')} 返回产品列表</a>
-        </div>
-
-        <!-- Feature Block -->
-        <section class="section" style="padding-top:0">
-            <div class="feature-block${reverse ? ' reverse' : ''}">
-                <div class="feature-visual">${generateElegantPanel()}</div>
-                <div class="feature-text">
-                    <div class="ft-tag">${d.tag}</div>
-                    <h3>${d.heading}</h3>
-                    <p>${d.desc}</p>
-                    <ul class="feature-list">
-                        ${d.list.map(item => `<li>${item}</li>`).join('')}
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Spec Cards -->
-        <section class="section" style="padding-top:0">
-            <div class="section-title" style="margin-bottom:36px">
-                <div class="eyebrow">SPECIFICATIONS</div>
-                <h2>产品<span class="text-gold">规格参数</span></h2>
-            </div>
-            <div class="product-specs" style="margin-top:0">
-                ${d.specs.map(s => `<div class="spec-card"><div class="spec-value">${s.value}</div><div class="spec-name">${s.name}</div></div>`).join('')}
-            </div>
-        </section>
-
-        <!-- Related Products -->
-        <section class="section" style="padding-top:40px">
-            <div class="section-title" style="margin-bottom:36px">
-                <div class="eyebrow">MORE PRODUCTS</div>
-                <h2>其他<span class="text-gold">产品</span></h2>
-            </div>
-            <div class="card-grid">
-                ${productCard(prevP)}
-                ${productCard(nextP)}
-            </div>
-        </section>
-
-        <!-- CTA -->
-        <section class="cta-section">
-            <h2>需要<span class="text-gold">定制方案</span>？</h2>
-            <p>告诉我们的工程团队您的需求，获取专业PCB/PCBA定制方案与报价</p>
-            <div class="cta-buttons">
-                <a href="#/contact" class="btn btn-primary">获取定制报价 ${icons.arrow}</a>
-                <a href="#/solutions" class="btn btn-outline">查看行业方案</a>
-            </div>
-        </section>
     </div>`;
 }
 
-// ---- Page: Solutions ----
-function renderSolutions() {
-    const solutionsData = [
-        { img: 'automotive.jpg', icon: icons.car, title: '汽车电子', desc: '车规级PCB方案，通过IATF 16949认证，应用于ECU控制单元、BMS电池管理、车载娱乐系统、汽车雷达等核心模块。' },
-        { img: 'telecom.jpg', icon: icons.antenna, title: '通讯设备', desc: '5G/4G通信基站及射频模块PCB方案，高频高速材料，低损耗传输，保障信号完整性与通信质量。' },
-        { img: 'industrial.jpg', icon: icons.factory, title: '工业控制', desc: '高可靠性工业控制板，耐恶劣环境，长期稳定运行，应用于PLC、变频器、伺服驱动器等工业自动化设备。' },
-        { img: 'medical.jpg', icon: icons.medical, title: '医疗电子', desc: '通过ISO 13485医疗体系认证，精密监测诊断设备PCB方案，包括超声、监护仪、血氧仪等专业医疗设备。' },
-        { img: 'consumer.jpg', icon: icons.chip, title: '消费电子', desc: '面向智能手机、可穿戴设备、智能家居等消费类产品的高密度PCB/PCBA方案，满足轻薄化、高性能需求。' },
-        { img: 'drone.jpg', icon: icons.truck, title: '无人机与新能源', desc: '无人机飞控板、新能源BMS与逆变器PCB方案，厚铜板承载大电流，满足高功率与轻量化双重需求。' },
-    ];
-    const solutionsHtml = solutionsData.map(s => `
-                <div class="solution-card">
-                    <div class="sol-visual">
-                        <div class="sol-visual-img" style="background-image:url('images/solutions/${s.img}')"></div>
-                    </div>
-                    <h3>${s.title}</h3>
-                    <p>${s.desc}</p>
-                </div>`).join('');
+async function loadProductDetail(id) {
+    const root = document.getElementById('productRoot');
+    if (!root) return;
 
+    const token = ++productsLoadToken;
+    try {
+        const res = await fetch(`api/products.php?action=detail&id=${encodeURIComponent(id)}`);
+        const data = await res.json();
+        if (token !== productsLoadToken) return;
+        if (!document.body.contains(root)) return;
+
+        if (!data.ok) {
+            root.innerHTML = `
+            <div class="product-hero" style="background-image:url('images/products-hero.jpg')">
+                <div class="eyebrow">PRODUCT CENTER</div>
+                <h1>产品<span class="text-gold">中心</span></h1>
+            </div>
+            <section class="section">
+                <div class="news-empty" style="display:block">
+                    ${escapeHtml(data.message || '产品不存在或已下架')}
+                    <div style="margin-top:24px"><a class="btn btn-outline" href="#/products">返回产品列表</a></div>
+                </div>
+            </section>`;
+            return;
+        }
+
+        const p = data.data;
+        document.title = `${p.title} — LIERXIN 利尔鑫产品中心`;
+
+        const specCards = (p.specs || []).map(s =>
+            `<div class="spec-card"><div class="spec-value">${escapeHtml(s.value)}</div><div class="spec-name">${escapeHtml(s.name)}</div></div>`
+        ).join('');
+
+        const pointList = (p.detail_list || []).map(i => `<li>${escapeHtml(i)}</li>`).join('');
+
+        // 「其他产品」用相邻的两件产品填充，只有一件时就展示一件
+        const others = [data.prev, data.next].filter(Boolean);
+        const relatedHtml = others.length
+            ? `<section class="section" style="padding-top:40px">
+                   <div class="section-title" style="margin-bottom:36px">
+                       <div class="eyebrow">MORE PRODUCTS</div>
+                       <h2>其他<span class="text-gold">产品</span></h2>
+                   </div>
+                   <div class="card-grid">${others.map(productCard).join('')}</div>
+               </section>`
+            : '';
+
+        root.innerHTML = `
+            <div class="product-hero article-hero" style="background-image:url('${escapeAttr(p.cover)}')">
+                <div class="eyebrow">${escapeHtml(p.detail_tag || p.en || 'PRODUCT')}</div>
+                <h1>${escapeHtml(p.title)}</h1>
+                <div class="article-hero-meta">
+                    <span>${escapeHtml(p.detail_heading || p.title)}</span>
+                    <span class="dot">·</span>
+                    <span>${p.views} 次浏览</span>
+                </div>
+            </div>
+
+            <div class="detail-nav">
+                <a href="#/products" class="back-link">${icons.arrow.replace('M3 8h10M9 4l4 4-4 4', 'M13 8H3M7 4L3 8l4 4')} 返回产品列表</a>
+            </div>
+
+            <!-- Feature Block -->
+            <section class="section" style="padding-top:0">
+                <div class="feature-block">
+                    <div class="feature-visual">${generateElegantPanel()}</div>
+                    <div class="feature-text">
+                        <div class="ft-tag">${escapeHtml(p.detail_tag || p.en || '')}</div>
+                        <h3>${escapeHtml(p.detail_heading || p.title)}</h3>
+                        <p>${escapeHtml(p.detail_desc || p.shortDesc || '')}</p>
+                        ${pointList ? `<ul class="feature-list">${pointList}</ul>` : ''}
+                    </div>
+                </div>
+            </section>
+
+            <!-- Spec Cards -->
+            ${specCards ? `
+            <section class="section" style="padding-top:0">
+                <div class="section-title" style="margin-bottom:36px">
+                    <div class="eyebrow">SPECIFICATIONS</div>
+                    <h2>产品<span class="text-gold">规格参数</span></h2>
+                </div>
+                <div class="product-specs" style="margin-top:0">${specCards}</div>
+            </section>` : ''}
+
+            ${p.content ? `
+            <section class="section" style="padding-top:0">
+                <div class="article-wrap">
+                    <div class="article-body">${p.content}</div>
+                </div>
+            </section>` : ''}
+
+            ${relatedHtml}
+
+            <!-- CTA -->
+            <section class="cta-section">
+                <h2>需要<span class="text-gold">定制方案</span>？</h2>
+                <p>告诉我们的工程团队您的需求，获取专业PCB/PCBA定制方案与报价</p>
+                <div class="cta-buttons">
+                    <a href="#/contact" class="btn btn-primary">获取定制报价 ${icons.arrow}</a>
+                    <a href="#/solutions" class="btn btn-outline">查看行业方案</a>
+                </div>
+            </section>`;
+    } catch (err) {
+        if (token !== productsLoadToken) return;
+        root.innerHTML = `
+        <section class="section">
+            <div class="news-empty" style="display:block">
+                产品加载失败，请稍后重试
+                <div style="margin-top:24px"><a class="btn btn-outline" href="#/products">返回产品列表</a></div>
+            </div>
+        </section>`;
+    }
+}
+
+// ---- Page: Solutions ----
+let solutionsLoadToken = 0;
+
+/** 方案卡片骨架屏 */
+function solutionsSkeleton(n) {
+    return Array.from({ length: n }, () => `
+        <div class="solution-card is-loading">
+            <div class="sol-visual">
+                <div class="sol-visual-img skeleton-block"></div>
+            </div>
+            <div class="skeleton-line" style="width:40%;height:18px"></div>
+            <div class="skeleton-line" style="width:100%"></div>
+            <div class="skeleton-line" style="width:86%"></div>
+        </div>`).join('');
+}
+
+function solutionCard(item) {
+    return `
+        <a class="solution-card solution-link" href="#/solutions/${item.id}">
+            <div class="sol-visual">
+                <div class="sol-visual-img" style="background-image:url('${escapeAttr(item.cover)}')"></div>
+            </div>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.summary)}</p>
+            <div class="sol-more">了解详情 ${icons.arrow}</div>
+        </a>`;
+}
+
+function renderSolutions() {
     return `
     <div class="page-enter">
         <div class="product-hero" style="background-image:url('images/solutions-hero.jpg')">
@@ -772,47 +716,8 @@ function renderSolutions() {
         </div>
 
         <section class="section">
-            <div class="solutions-grid">
-                ${solutionsHtml}
-            </div>
-        </section>
-
-        <!-- Feature: Auto -->
-        <section class="section" style="padding-top:0">
-            <div class="feature-block">
-                <div class="feature-visual">${generateElegantPanel()}</div>
-                <div class="feature-text">
-                    <div class="ft-tag">AUTOMOTIVE</div>
-                    <h3>汽车电子解决方案</h3>
-                    <p>利尔鑫为汽车电子领域提供符合车规标准的PCB解决方案，产品涵盖ECU控制单元、BMS电池管理、车载信息娱乐系统、毫米波雷达等核心模块，确保在严苛的汽车使用环境下长期可靠运行。</p>
-                    <ul class="feature-list">
-                        <li>通过 IATF 16949 汽车行业质量体系认证</li>
-                        <li>抗振动设计，机械可靠性测试通过</li>
-                        <li>厚铜方案承载大电流，适用于BMS系统</li>
-                        <li>高频材料支持77GHz车载雷达与ADAS</li>
-                        <li>服务VinFast、蔚来、吉利威睿、长安汽车等头部车企</li>
-                    </ul>
-                </div>
-            </div>
-        </section>
-
-        <!-- Feature: Comm -->
-        <section class="section" style="padding-top:0">
-            <div class="feature-block reverse">
-                <div class="feature-visual">${generateElegantPanel()}</div>
-                <div class="feature-text">
-                    <div class="ft-tag">COMMUNICATION</div>
-                    <h3>通讯设备解决方案</h3>
-                    <p>面向5G通信基站、射频前端、光模块等应用场景，提供高频高速PCB解决方案。采用低损耗高频材料，确保信号完整性，满足高速数据传输需求。</p>
-                    <ul class="feature-list">
-                        <li>低介电常数与低损耗因子材料</li>
-                        <li>多层高频混压工艺</li>
-                        <li>精密阻抗控制，精度±8%</li>
-                        <li>支持77GHz毫米波雷达应用</li>
-                        <li>服务精华电子（ASK终端）等通信行业头部企业</li>
-                    </ul>
-                </div>
-            </div>
+            <div class="solutions-grid" id="solutionsGrid">${solutionsSkeleton(6)}</div>
+            <div class="news-empty" id="solutionsEmpty" hidden></div>
         </section>
 
         <!-- CTA -->
@@ -825,6 +730,168 @@ function renderSolutions() {
             </div>
         </section>
     </div>`;
+}
+
+/** 行业方案列表：数据来自后台接口 */
+async function loadSolutions() {
+    const grid = document.getElementById('solutionsGrid');
+    if (!grid) return;
+
+    const token = ++solutionsLoadToken;
+    const emptyBox = document.getElementById('solutionsEmpty');
+    if (emptyBox) emptyBox.hidden = true;
+
+    try {
+        const res = await fetch('api/solutions.php?action=list&limit=24');
+        const data = await res.json();
+        if (token !== solutionsLoadToken) return;
+        if (!document.body.contains(grid)) return;
+
+        if (!data.ok || !data.data.length) {
+            grid.innerHTML = '';
+            if (emptyBox) {
+                emptyBox.hidden = false;
+                emptyBox.textContent = data.message || '暂无行业方案';
+            }
+            return;
+        }
+        grid.innerHTML = data.data.map(solutionCard).join('');
+    } catch (err) {
+        if (token !== solutionsLoadToken) return;
+        grid.innerHTML = '';
+        if (emptyBox) {
+            emptyBox.hidden = false;
+            emptyBox.textContent = '方案加载失败，请稍后重试';
+        }
+    }
+}
+
+// ---- Page: Solution Detail ----
+function renderSolutionDetail(id) {
+    return `
+    <div class="page-enter">
+        <div id="solutionRoot">
+            <div class="product-hero">
+                <div class="eyebrow">INDUSTRY SOLUTIONS</div>
+                <h1>行业<span class="text-gold">方案</span></h1>
+            </div>
+            <section class="section">
+                <div class="solutions-grid">${solutionsSkeleton(1)}</div>
+            </section>
+        </div>
+    </div>`;
+}
+
+async function loadSolutionDetail(id) {
+    const root = document.getElementById('solutionRoot');
+    if (!root) return;
+
+    const token = ++solutionsLoadToken;
+    try {
+        const res = await fetch(`api/solutions.php?action=detail&id=${encodeURIComponent(id)}`);
+        const data = await res.json();
+        if (token !== solutionsLoadToken) return;
+        if (!document.body.contains(root)) return;
+
+        if (!data.ok) {
+            root.innerHTML = `
+            <div class="product-hero">
+                <div class="eyebrow">INDUSTRY SOLUTIONS</div>
+                <h1>行业<span class="text-gold">方案</span></h1>
+            </div>
+            <section class="section">
+                <div class="news-empty" style="display:block">
+                    ${escapeHtml(data.message || '方案不存在或已下架')}
+                    <div style="margin-top:24px"><a class="btn btn-outline" href="#/solutions">返回方案列表</a></div>
+                </div>
+            </section>`;
+            return;
+        }
+
+        const s = data.data;
+        document.title = `${s.title} — LIERXIN 利尔鑫行业解决方案`;
+
+        const highlights = (s.highlights || []).length
+            ? `<div class="sol-highlights">
+                   <h4>方案亮点</h4>
+                   <ul>${s.highlights.map(h => `<li>${escapeHtml(h)}</li>`).join('')}</ul>
+               </div>`
+            : '';
+
+        root.innerHTML = `
+            <div class="product-hero article-hero" style="background-image:url('${escapeAttr(s.cover)}')">
+                <div class="eyebrow">${escapeHtml(s.en_title || 'INDUSTRY SOLUTIONS')}</div>
+                <h1>${escapeHtml(s.title)}</h1>
+                <div class="article-hero-meta">
+                    <span>${escapeHtml(s.title)}行业解决方案</span>
+                    <span class="dot">·</span>
+                    <span>${s.views} 次浏览</span>
+                </div>
+            </div>
+
+            <div class="detail-nav">
+                <a href="#/solutions" class="back-link">${icons.arrow.replace('M3 8h10M9 4l4 4-4 4', 'M13 8H3M7 4L3 8l4 4')} 返回行业方案</a>
+            </div>
+
+            <section class="section" style="padding-top:0">
+                <div class="article-wrap">
+                    ${s.summary ? `<div class="article-lead">${escapeHtml(s.summary)}</div>` : ''}
+                    ${highlights}
+                    <div class="article-body">${s.content}</div>
+
+                    <div class="article-share">
+                        <span>分享至：</span>
+                        <button class="share-btn" data-share="copy">复制链接</button>
+                    </div>
+
+                    <div class="article-nav">
+                        ${data.prev
+                            ? `<a class="anav-item anav-prev" href="#/solutions/${data.prev.id}">
+                                 <span class="anav-label">上一个行业</span>
+                                 <span class="anav-title">${escapeHtml(data.prev.title)}</span>
+                               </a>`
+                            : `<div class="anav-item is-empty"><span class="anav-label">上一个行业</span><span class="anav-title">已经是第一个</span></div>`}
+                        ${data.next
+                            ? `<a class="anav-item anav-next" href="#/solutions/${data.next.id}">
+                                 <span class="anav-label">下一个行业</span>
+                                 <span class="anav-title">${escapeHtml(data.next.title)}</span>
+                               </a>`
+                            : `<div class="anav-item is-empty"><span class="anav-label">下一个行业</span><span class="anav-title">已经是最后一个</span></div>`}
+                    </div>
+                </div>
+            </section>
+
+            <section class="cta-section">
+                <h2>需要${escapeHtml(s.title)}<span class="text-gold">方案评估</span>？</h2>
+                <p>把您的应用场景与技术要求告诉我们，工程团队将提供针对性的方案建议</p>
+                <div class="cta-buttons">
+                    <a href="#/contact" class="btn btn-primary">在线留言 ${icons.arrow}</a>
+                    <a href="#/solutions" class="btn btn-outline">更多行业方案</a>
+                </div>
+            </section>`;
+
+        const copyBtn = root.querySelector('[data-share="copy"]');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const url = location.href;
+                const done = () => { copyBtn.textContent = '已复制 ✓'; setTimeout(() => (copyBtn.textContent = '复制链接'), 1800); };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(done).catch(() => prompt('复制以下链接：', url));
+                } else {
+                    prompt('复制以下链接：', url);
+                }
+            });
+        }
+    } catch (err) {
+        if (token !== solutionsLoadToken) return;
+        root.innerHTML = `
+        <section class="section">
+            <div class="news-empty" style="display:block">
+                方案加载失败，请稍后重试
+                <div style="margin-top:24px"><a class="btn btn-outline" href="#/solutions">返回行业方案</a></div>
+            </div>
+        </section>`;
+    }
 }
 
 // ---- Page: About ----
@@ -1086,19 +1153,51 @@ function renderAbout() {
 }
 
 // ---- Page: News ----
-function renderNews() {
-    const newsItems = [
-        { date: '2026-08-20', tag: '企业动态', img: 'news-1.jpg', title: '利尔鑫2026年半年度经营总结会圆满召开', excerpt: '回顾上半年发展成果，部署下半年重点工作，利尔鑫持续推进智能制造与全球化布局。' },
-        { date: '2026-07-15', tag: '技术前沿', img: 'news-2.jpg', title: '利尔鑫任意层HDI工艺再升级，最小孔径达50μm', excerpt: '在HDI微孔激光钻孔工艺上取得新突破，为高密度互连提供更优解决方案，满足5G终端需求。' },
-        { date: '2026-06-28', tag: '合作动态', img: 'news-3.jpg', title: '利尔鑫深化与VinFast合作，共推电动车PCB方案', excerpt: '为越南电动车龙头VinFast批量供应汽车移动电源6层通孔板，利尔鑫持续为全球头部车企提供高品质产品。' },
-        { date: '2026-05-30', tag: '资质荣誉', img: 'news-4.jpg', title: '利尔鑫体系认证再添多项权威背书', excerpt: '公司通过GJB 9001C武器装备质量管理、QC080000有害物质控制及海关AEO高级认证，资质体系行业领先。' },
-        { date: '2026-04-18', tag: '展会动态', img: 'news-5.jpg', title: '利尔鑫亮相2026国际电子电路展览会', excerpt: '利尔鑫携最新HDI、高频高速PCB及PCBA一站式方案亮相展会，吸引众多客户交流洽谈。' },
-        { date: '2026-03-22', tag: '行业洞察', img: 'news-6.jpg', title: '新能源汽车PCB需求增长，厚铜板方案助力BMS', excerpt: '深入分析新能源车PCB需求趋势，利尔鑫厚铜板方案为BMS电池管理系统提供可靠保障。' },
-        { date: '2026-02-10', tag: '企业动态', img: 'news-7.jpg', title: '四大基地产能持续爬坡，PCB月产能达60万平米', excerpt: '深圳、湖北、清远、江西四大生产基地协同运作，PCB总产能达60万平米/月，72小时中国交付、15天欧美达货。' },
-        { date: '2026-01-15', tag: '技术前沿', img: 'news-8.jpg', title: '利尔鑫PCB方案助力医疗监护仪与内窥镜创新', excerpt: '通过ISO 13485医疗体系认证，为医疗设备提供高可靠性PCB方案，助力智慧医疗发展。' },
-        { date: '2025-12-20', tag: '资质荣誉', img: 'news-9.jpg', title: '利尔鑫通过ISO 50001能源管理体系认证', excerpt: '在能源管理与绿色制造方面取得突出成绩，践行"以绿色科技回馈社会"的企业使命。' },
-    ];
+const NEWS_PAGE_SIZE = 9;
+let newsState = { tag: '', page: 1 };
+let newsLoadToken = 0;
+let newsTagsLoaded = false;
 
+/** 列表骨架屏，避免接口返回前页面空白 */
+function newsSkeleton(n) {
+    return Array.from({ length: n }, () => `
+        <div class="news-card is-loading">
+            <div class="news-visual skeleton-block"></div>
+            <div class="news-body">
+                <div class="skeleton-line" style="width:72px"></div>
+                <div class="skeleton-line" style="width:100%;height:16px"></div>
+                <div class="skeleton-line" style="width:88%"></div>
+                <div class="skeleton-line" style="width:60%"></div>
+            </div>
+        </div>`).join('');
+}
+
+function newsCard(item) {
+    return `
+        <a class="news-card news-link" href="#/news/${item.id}">
+            <div class="news-visual" style="background-image:url('${escapeAttr(item.img)}')">
+                <div class="news-date-badge">${escapeHtml(item.date)}</div>
+            </div>
+            <div class="news-body">
+                <div class="news-tag">${escapeHtml(item.tag || '资讯')}</div>
+                <h3 class="news-title">${escapeHtml(item.title)}</h3>
+                <p class="news-excerpt">${escapeHtml(item.excerpt)}</p>
+                <div class="news-more">阅读全文 ${icons.arrow}</div>
+            </div>
+        </a>`;
+}
+
+function escapeHtml(str) {
+    return String(str == null ? '' : str)
+        .replace(/&/g, '&amp;').replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+}
+
+function escapeAttr(str) {
+    return escapeHtml(str).replace(/'/g, '&#39;');
+}
+
+function renderNews() {
     return `
     <div class="page-enter">
         <div class="product-hero" style="background-image:url('images/news-hero.jpg')">
@@ -1108,19 +1207,10 @@ function renderNews() {
         </div>
 
         <section class="section">
-            <div class="news-grid">
-                ${newsItems.map(item => `
-                <div class="news-card">
-                    <div class="news-visual" style="background-image:url('images/news/${item.img}')">
-                        <div class="news-date-badge">${item.date}</div>
-                    </div>
-                    <div class="news-body">
-                        <div class="news-tag">${item.tag}</div>
-                        <h3 class="news-title">${item.title}</h3>
-                        <p class="news-excerpt">${item.excerpt}</p>
-                    </div>
-                </div>`).join('')}
-            </div>
+            <div class="news-filter" id="newsFilter"></div>
+            <div class="news-grid" id="newsGrid">${newsSkeleton(6)}</div>
+            <div class="news-empty" id="newsEmpty" hidden></div>
+            <div class="site-pager" id="newsPager"></div>
         </section>
 
         <section class="cta-section">
@@ -1132,6 +1222,234 @@ function renderNews() {
             </div>
         </section>
     </div>`;
+}
+
+/** 分类筛选条 */
+async function loadNewsTags() {
+    const box = document.getElementById('newsFilter');
+    if (!box) return;
+    try {
+        const res = await fetch('api/news.php?action=tags');
+        const data = await res.json();
+        if (!data.ok || !box) return;
+
+        const tags = (data.data || []).map(t => t.tag);
+        const chips = [`<button class="news-chip${newsState.tag === '' ? ' is-active' : ''}" data-tag="">全部</button>`]
+            .concat(tags.map(t =>
+                `<button class="news-chip${newsState.tag === t ? ' is-active' : ''}" data-tag="${escapeAttr(t)}">${escapeHtml(t)}</button>`
+            )).join('');
+
+        box.innerHTML = chips;
+        newsTagsLoaded = true;
+
+        box.querySelectorAll('.news-chip').forEach(chip => {
+            chip.addEventListener('click', () => {
+                newsState.tag = chip.getAttribute('data-tag') || '';
+                newsState.page = 1;
+                loadNewsList();
+            });
+        });
+    } catch (err) {
+        // 分类加载失败不影响列表本身
+    }
+}
+
+/** 列表数据 */
+async function loadNewsList() {
+    const grid = document.getElementById('newsGrid');
+    if (!grid) return;
+
+    const token = ++newsLoadToken;
+    const { tag, page } = newsState;
+
+    grid.innerHTML = newsSkeleton(6);
+    const emptyBox = document.getElementById('newsEmpty');
+    const pagerBox = document.getElementById('newsPager');
+    if (emptyBox) emptyBox.hidden = true;
+    if (pagerBox) pagerBox.innerHTML = '';
+
+    if (!newsTagsLoaded) await loadNewsTags();
+
+    try {
+        const qs = `action=list&limit=${NEWS_PAGE_SIZE}&page=${page}` +
+            (tag ? `&tag=${encodeURIComponent(tag)}` : '');
+        const res = await fetch(`api/news.php?${qs}`);
+        const data = await res.json();
+        if (token !== newsLoadToken) return;         // 用户已切换到其它页面
+        if (!document.body.contains(grid)) return;
+
+        if (!data.ok) {
+            grid.innerHTML = '';
+            emptyBox.hidden = false;
+            emptyBox.textContent = data.message || '资讯加载失败';
+            return;
+        }
+
+        if (!data.data.length) {
+            grid.innerHTML = '';
+            emptyBox.hidden = false;
+            emptyBox.textContent = tag ? `「${tag}」分类下暂无资讯` : '暂无资讯';
+            return;
+        }
+
+        grid.innerHTML = data.data.map(newsCard).join('');
+        renderNewsPager(data);
+    } catch (err) {
+        if (token !== newsLoadToken) return;
+        grid.innerHTML = '';
+        if (emptyBox) {
+            emptyBox.hidden = false;
+            emptyBox.textContent = '资讯加载失败，请稍后重试';
+        }
+    }
+}
+
+function renderNewsPager(data) {
+    const box = document.getElementById('newsPager');
+    if (!box || data.pages <= 1) {
+        if (box) box.innerHTML = '<span class="pager-info">共 ' + data.total + ' 条资讯</span>';
+        return;
+    }
+    let html = '';
+    if (data.page > 1) html += `<button class="pager-btn" data-page="${data.page - 1}">上一页</button>`;
+    for (let p = 1; p <= data.pages; p++) {
+        html += p === data.page
+            ? `<span class="pager-btn is-current">${p}</span>`
+            : `<button class="pager-btn" data-page="${p}">${p}</button>`;
+    }
+    if (data.page < data.pages) html += `<button class="pager-btn" data-page="${data.page + 1}">下一页</button>`;
+    html += `<span class="pager-info">共 ${data.total} 条 · 第 ${data.page}/${data.pages} 页</span>`;
+    box.innerHTML = html;
+
+    box.querySelectorAll('button[data-page]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            newsState.page = parseInt(btn.getAttribute('data-page'), 10) || 1;
+            loadNewsList();
+            window.scrollTo({ top: 300, behavior: 'smooth' });
+        });
+    });
+}
+
+// ---- Page: News Detail ----
+function renderNewsDetail(id) {
+    return `
+    <div class="page-enter">
+        <div id="articleRoot">
+            <div class="product-hero">
+                <div class="eyebrow">NEWS CENTER</div>
+                <h1>资讯<span class="text-gold">详情</span></h1>
+            </div>
+            <section class="section">
+                <div class="article-loading">
+                    <div class="news-grid">${newsSkeleton(1)}</div>
+                </div>
+            </section>
+        </div>
+    </div>`;
+}
+
+async function loadNewsDetail(id) {
+    const root = document.getElementById('articleRoot');
+    if (!root) return;
+
+    const token = ++newsLoadToken;
+    try {
+        const res = await fetch(`api/news.php?action=detail&id=${encodeURIComponent(id)}`);
+        const data = await res.json();
+        if (token !== newsLoadToken) return;
+        if (!document.body.contains(root)) return;
+
+        if (!data.ok) {
+            root.innerHTML = `
+            <div class="product-hero">
+                <div class="eyebrow">NEWS CENTER</div>
+                <h1>资讯<span class="text-gold">中心</span></h1>
+            </div>
+            <section class="section">
+                <div class="news-empty" style="display:block">
+                    ${escapeHtml(data.message || '资讯不存在或已下架')}
+                    <div style="margin-top:24px"><a class="btn btn-outline" href="#/news">返回资讯列表</a></div>
+                </div>
+            </section>`;
+            return;
+        }
+
+        const a = data.data;
+        document.title = `${a.title} — LIERXIN 利尔鑫资讯中心`;
+
+        root.innerHTML = `
+            <div class="product-hero article-hero" style="background-image:url('${escapeAttr(a.cover)}')">
+                <div class="eyebrow">${escapeHtml(a.tag || 'NEWS')}</div>
+                <h1>${escapeHtml(a.title)}</h1>
+                <div class="article-hero-meta">
+                    <span>${escapeHtml(a.date)}</span>
+                    <span class="dot">·</span>
+                    <span>${a.views} 次浏览</span>
+                </div>
+            </div>
+
+            <div class="detail-nav">
+                <a href="#/news" class="back-link">${icons.arrow.replace('M3 8h10M9 4l4 4-4 4', 'M13 8H3M7 4L3 8l4 4')} 返回资讯列表</a>
+            </div>
+
+            <section class="section" style="padding-top:0">
+                <div class="article-wrap">
+                    ${a.excerpt ? `<div class="article-lead">${escapeHtml(a.excerpt)}</div>` : ''}
+                    <div class="article-body">${a.content}</div>
+
+                    <div class="article-share">
+                        <span>分享至：</span>
+                        <button class="share-btn" data-share="copy" data-title="${escapeAttr(a.title)}">复制链接</button>
+                    </div>
+
+                    <div class="article-nav">
+                        ${data.prev
+                            ? `<a class="anav-item anav-prev" href="#/news/${data.prev.id}">
+                                 <span class="anav-label">上一篇</span>
+                                 <span class="anav-title">${escapeHtml(data.prev.title)}</span>
+                               </a>`
+                            : `<div class="anav-item is-empty"><span class="anav-label">上一篇</span><span class="anav-title">已经是最新一篇</span></div>`}
+                        ${data.next
+                            ? `<a class="anav-item anav-next" href="#/news/${data.next.id}">
+                                 <span class="anav-label">下一篇</span>
+                                 <span class="anav-title">${escapeHtml(data.next.title)}</span>
+                               </a>`
+                            : `<div class="anav-item is-empty"><span class="anav-label">下一篇</span><span class="anav-title">已经是最后一篇</span></div>`}
+                    </div>
+                </div>
+            </section>
+
+            <section class="cta-section">
+                <h2>有需求？<span class="text-gold">联系我们</span></h2>
+                <p>欢迎就本文提及的产品与技术与我们进一步沟通</p>
+                <div class="cta-buttons">
+                    <a href="#/contact" class="btn btn-primary">在线留言 ${icons.arrow}</a>
+                    <a href="#/news" class="btn btn-outline">更多资讯</a>
+                </div>
+            </section>`;
+
+        const copyBtn = root.querySelector('[data-share="copy"]');
+        if (copyBtn) {
+            copyBtn.addEventListener('click', () => {
+                const url = location.href;
+                const done = () => { copyBtn.textContent = '已复制 ✓'; setTimeout(() => (copyBtn.textContent = '复制链接'), 1800); };
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(url).then(done).catch(() => prompt('复制以下链接：', url));
+                } else {
+                    prompt('复制以下链接：', url);
+                }
+            });
+        }
+    } catch (err) {
+        if (token !== newsLoadToken) return;
+        root.innerHTML = `
+        <section class="section">
+            <div class="news-empty" style="display:block">
+                资讯加载失败，请稍后重试
+                <div style="margin-top:24px"><a class="btn btn-outline" href="#/news">返回资讯列表</a></div>
+            </div>
+        </section>`;
+    }
 }
 
 // ---- Page: Contact ----
@@ -1180,28 +1498,28 @@ function renderContact() {
 
                 <div class="contact-form-card">
                     <h3 style="font-family:var(--font-serif);font-size:22px;margin-bottom:32px">在线留言</h3>
-                    <form onsubmit="submitForm(event)">
+                    <form id="contactForm" onsubmit="submitForm(event)">
                         <div class="form-row">
                             <div class="form-group">
                                 <label>您的姓名 *</label>
-                                <input type="text" class="form-input" placeholder="请输入您的姓名" required>
+                                <input type="text" class="form-input" name="name" placeholder="请输入您的姓名" maxlength="50" required>
                             </div>
                             <div class="form-group">
                                 <label>联系电话 *</label>
-                                <input type="tel" class="form-input" placeholder="请输入手机号" required>
+                                <input type="tel" class="form-input" name="phone" placeholder="请输入手机号" maxlength="30" required>
                             </div>
                         </div>
                         <div class="form-group">
                             <label>电子邮箱</label>
-                            <input type="email" class="form-input" placeholder="请输入邮箱地址">
+                            <input type="email" class="form-input" name="email" placeholder="请输入邮箱地址" maxlength="120">
                         </div>
                         <div class="form-group">
                             <label>公司名称</label>
-                            <input type="text" class="form-input" placeholder="请输入公司名称">
+                            <input type="text" class="form-input" name="company" placeholder="请输入公司名称" maxlength="120">
                         </div>
                         <div class="form-group">
                             <label>咨询产品</label>
-                            <select class="form-input">
+                            <select class="form-input" name="product">
                                 <option value="">请选择咨询产品</option>
                                 <option>HDI线路板</option>
                                 <option>多层PCB板</option>
@@ -1213,9 +1531,19 @@ function renderContact() {
                         </div>
                         <div class="form-group">
                             <label>留言内容 *</label>
-                            <textarea class="form-textarea" placeholder="请描述您的需求..." required></textarea>
+                            <textarea class="form-textarea" name="content" placeholder="请描述您的需求..." maxlength="2000" required></textarea>
+                        </div>
+                        <div class="form-group">
+                            <label>验证码 *</label>
+                            <div class="form-captcha">
+                                <input type="text" class="form-input" id="captchaInput" name="captcha"
+                                       placeholder="请输入右侧验证码" maxlength="4" autocomplete="off" required>
+                                <img class="form-captcha-img" id="captchaImg" src="api/captcha.php"
+                                     alt="验证码" title="看不清？点击刷新" onclick="refreshCaptcha()">
+                            </div>
                         </div>
                         <button type="submit" class="btn btn-primary" style="width:100%;justify-content:center">提交留言 ${icons.arrow}</button>
+                        <div class="form-status" id="formStatus" role="alert" aria-live="polite"></div>
                     </form>
                 </div>
             </div>
@@ -1233,18 +1561,74 @@ function renderContact() {
     </div>`;
 }
 
-// ---- Form submit handler ----
-function submitForm(e) {
+// ---- 验证码刷新 ----
+function refreshCaptcha() {
+    const img = document.getElementById('captchaImg');
+    if (img) {
+        img.src = 'api/captcha.php?' + Date.now();
+    }
+}
+
+// ---- 表单状态提示 ----
+function setFormStatus(message, type) {
+    const el = document.getElementById('formStatus');
+    if (!el) return;
+    el.textContent = message;
+    el.className = 'form-status is-visible is-' + (type === 'error' ? 'error' : 'success');
+}
+
+function clearFormStatus() {
+    const el = document.getElementById('formStatus');
+    if (el) el.className = 'form-status';
+}
+
+// ---- Form submit handler（提交到后台接口） ----
+async function submitForm(e) {
     e.preventDefault();
-    const btn = e.target.querySelector('button[type="submit"]');
-    const original = btn.innerHTML;
-    btn.innerHTML = '提交成功 ✓';
-    btn.style.opacity = '0.8';
-    setTimeout(() => {
-        e.target.reset();
-        btn.innerHTML = original;
-        btn.style.opacity = '';
-    }, 2000);
+
+    const form = e.target;
+    const btn = form.querySelector('button[type="submit"]');
+    const originalHtml = btn.innerHTML;
+    const captchaInput = document.getElementById('captchaInput');
+
+    // 兜底：页面缓存了旧版本时没有验证码字段，此时不能假装提交成功
+    if (!captchaInput) {
+        setFormStatus('当前页面版本较旧，请强制刷新后再提交（Mac：Cmd + Shift + R，Windows：Ctrl + F5）。', 'error');
+        return;
+    }
+
+    clearFormStatus();
+    captchaInput.classList.remove('is-error');
+
+    btn.disabled = true;
+    btn.innerHTML = '提交中…';
+
+    try {
+        const res = await fetch('api/message.php', {
+            method: 'POST',
+            body: new FormData(form),
+        });
+        const data = await res.json();
+
+        if (data.ok) {
+            form.reset();
+            setFormStatus(data.message, 'success');
+        } else {
+            setFormStatus(data.message || '提交失败，请稍后重试', 'error');
+            // 验证码相关的错误，聚焦到验证码并标红
+            if (data.message && data.message.indexOf('验证码') !== -1 && captchaInput) {
+                captchaInput.classList.add('is-error');
+                captchaInput.focus();
+            }
+        }
+    } catch (err) {
+        setFormStatus('网络连接异常，请检查网络后重试，或直接电话联系我们', 'error');
+    } finally {
+        refreshCaptcha();
+        if (captchaInput) captchaInput.value = '';
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+    }
 }
 
 // ---- Router ----
@@ -1258,26 +1642,31 @@ const routes = {
 };
 
 function router() {
+    const app = document.getElementById('app');
+    if (!app) return;               // 独立页面（如 quote.html）不参与 SPA 路由
     const hash = location.hash.slice(1) || '/';
     let route, title;
     
-    // Handle product detail: /products/{id}
+    // Handle product detail: /products/{id}（异步拉取，不存在时详情页内给出提示）
     if (hash.startsWith('/products/')) {
         const productId = hash.replace('/products/', '');
-        const product = productsData.find(p => p.id === productId);
-        if (product) {
-            route = { render: () => renderProductDetail(productId) };
-            title = product.title;
-        } else {
-            route = routes['/products'];
-            title = '产品中心';
-        }
+        route = { render: () => renderProductDetail(productId) };
+        title = '产品详情';
+    } else if (hash.startsWith('/news/')) {
+        // Handle news detail: /news/{id}
+        const newsId = hash.slice('/news/'.length);
+        route = { render: () => renderNewsDetail(newsId) };
+        title = '资讯详情';
+    } else if (hash.startsWith('/solutions/')) {
+        // Handle solution detail: /solutions/{id}
+        const solutionId = hash.slice('/solutions/'.length);
+        route = { render: () => renderSolutionDetail(solutionId) };
+        title = '行业方案';
     } else {
         route = routes[hash] || routes['/'];
         title = route.title;
     }
 
-    const app = document.getElementById('app');
     app.innerHTML = route.render();
     app.classList.remove('page-enter');
     void app.offsetWidth;
@@ -1287,8 +1676,11 @@ function router() {
 
     document.querySelectorAll('.nav-link').forEach(link => {
         const linkHash = (link.getAttribute('href') || '').replace(/^#/, '');
-        // Highlight "产品中心" for both /products and /products/*
-        const isActive = linkHash === hash || (linkHash === '/products' && hash.startsWith('/products'));
+        // 产品中心与资讯中心在详情页时同样保持高亮
+        const isActive = linkHash === hash
+            || (linkHash === '/products' && hash.startsWith('/products'))
+            || (linkHash === '/news' && hash.startsWith('/news'))
+            || (linkHash === '/solutions' && hash.startsWith('/solutions'));
         link.classList.toggle('active', isActive);
     });
 
@@ -1299,10 +1691,49 @@ function router() {
     animateCounters();
     animateBars();
     handleScroll();
+
+    // 进入联系页时刷新验证码，避免沿用页面上旧的图片
+    if (hash === '/contact') {
+        refreshCaptcha();
+        // 由右下角「获取报价」触发的跳转：渲染完成后滚到留言表单
+        if (pendingQuoteScroll) {
+            pendingQuoteScroll = false;
+            scrollToContactForm();
+        }
+    } else {
+        pendingQuoteScroll = false;
+    }
+
+    // 资讯列表 / 详情的数据来自后台接口，渲染骨架后异步拉取
+    if (hash === '/news') {
+        newsTagsLoaded = false;      // 每次进入重新拉分类，后台新增后可立即呈现
+        newsState.tag = '';
+        newsState.page = 1;
+        loadNewsList();
+    } else if (hash.startsWith('/news/')) {
+        loadNewsDetail(hash.slice('/news/'.length));
+    }
+
+    // 行业方案同样来自后台接口
+    if (hash === '/solutions') {
+        loadSolutions();
+    } else if (hash.startsWith('/solutions/')) {
+        loadSolutionDetail(hash.slice('/solutions/'.length));
+    }
+
+    // 产品中心：列表页、详情页与首页「核心产品体系」区块
+    if (hash === '/products') {
+        loadProducts();
+    } else if (hash.startsWith('/products/')) {
+        loadProductDetail(hash.slice('/products/'.length));
+    } else if (hash === '/') {
+        loadHomeProducts();
+    }
 }
 
 // ---- Counter Animation ----
 function animateCounters() {
+    if (typeof IntersectionObserver === 'undefined') return;
     const counters = document.querySelectorAll('[data-count]');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1330,6 +1761,7 @@ function animateCounters() {
 
 // ---- Capability Bars Animation ----
 function animateBars() {
+    if (typeof IntersectionObserver === 'undefined') return;
     const bars = document.querySelectorAll('.cb-fill[data-width]');
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
@@ -1345,11 +1777,61 @@ function animateBars() {
 // ---- Scroll Handlers ----
 function handleScroll() {
     const navbar = document.getElementById('navbar');
-    const scrollTop = document.getElementById('scrollTop');
+    const floatActions = document.getElementById('floatActions');
     if (window.scrollY > 50) navbar.classList.add('scrolled');
     else navbar.classList.remove('scrolled');
-    if (window.scrollY > 400) scrollTop.classList.add('show');
-    else scrollTop.classList.remove('show');
+    // 下滑 400px 后，「获取报价」与「返回顶部」一起出现
+    if (floatActions) {
+        if (window.scrollY > 400) floatActions.classList.add('show');
+        else floatActions.classList.remove('show');
+    }
+}
+
+// ---- 跳转到在线留言表单 ----
+// 联系页由路由异步渲染，元素可能尚未插入，因此做有限次重试
+function scrollToContactForm() {
+    const tryScroll = (times) => {
+        const target = document.getElementById('contactForm')
+            || document.querySelector('.contact-form-card');
+        if (target) {
+            const top = target.getBoundingClientRect().top + window.scrollY - 90;
+            window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+            return;
+        }
+        if (times > 0) setTimeout(() => tryScroll(times - 1), 120);
+    };
+    tryScroll(12);
+}
+
+// 标记：切到联系页后自动滚到留言表单
+let pendingQuoteScroll = false;
+function goToQuoteForm() {
+    if (location.hash === '#/contact') {
+        scrollToContactForm();
+        return;
+    }
+    pendingQuoteScroll = true;
+    location.hash = '#/contact';
+}
+
+// 跳转到独立在线报价页（quote.html）
+function goToQuotePage() {
+    location.href = 'quote.html';
+}
+
+// 报价页内的「获取报价」：直接滚到页面底部的询价提交表单
+function scrollToQuoteForm() {
+    const target = document.getElementById('quoteForm');
+    if (!target) return;
+    const top = target.getBoundingClientRect().top + window.scrollY - 90;
+    window.scrollTo({ top: Math.max(top, 0), behavior: 'smooth' });
+}
+
+function closeMobileMenu() {
+    const menu = document.getElementById('navMenu');
+    const toggle = document.getElementById('navToggle');
+    if (menu) menu.classList.remove('open');
+    if (toggle) toggle.classList.remove('open');
 }
 
 // ---- Init ----
@@ -1384,15 +1866,43 @@ function initTheme() {
 
 document.addEventListener('DOMContentLoaded', () => {
     initTheme();
+
+    // 有 #app 才是 SPA 首页；quote.html 等独立页面只复用导航、主题与滚动逻辑
+    const isSpa = !!document.getElementById('app');
+
     const navToggle = document.getElementById('navToggle');
     const navMenu = document.getElementById('navMenu');
-    navToggle.addEventListener('click', () => {
-        navToggle.classList.toggle('open');
-        navMenu.classList.toggle('open');
-    });
-    document.getElementById('scrollTop').addEventListener('click', () => {
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-    });
-    if (!location.hash) location.hash = '#/';
-    router();
+    if (navToggle && navMenu) {
+        navToggle.addEventListener('click', () => {
+            navToggle.classList.toggle('open');
+            navMenu.classList.toggle('open');
+        });
+    }
+    const scrollTopBtn = document.getElementById('scrollTop');
+    if (scrollTopBtn) {
+        scrollTopBtn.addEventListener('click', () => {
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    }
+    // 首页右下角「获取报价」：进入在线报价系统
+    const floatQuote = document.getElementById('floatQuote');
+    if (floatQuote) {
+        floatQuote.addEventListener('click', goToQuotePage);
+    }
+    // 顶部导航「获取报价」：
+    //   首页 → 直达联系页的在线留言表单；报价页 → 滚到本页询价表单
+    const navQuote = document.getElementById('navQuote');
+    if (navQuote) {
+        navQuote.addEventListener('click', (e) => {
+            e.preventDefault();
+            if (isSpa) goToQuoteForm();
+            else scrollToQuoteForm();
+            closeMobileMenu();
+        });
+    }
+    if (isSpa) {
+        if (!location.hash) location.hash = '#/';
+        router();
+    }
+    handleScroll();
 });

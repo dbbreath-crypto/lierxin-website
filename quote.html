@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>在线报价系统 — 深圳利尔鑫实业有限公司</title>
+<meta name="description" content="PCB/PCBA 在线报价系统：选择尺寸、层数与工艺，实时估算价格与交期，并提交询价。">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@600;700;800;900&family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css?v=20261007">
+<link rel="stylesheet" href="css/quote.css?v=20261007">
+<script>
+    // 主题预加载：避免刷新时闪现深色
+    (function () {
+        try {
+            if (localStorage.getItem('lierxin-theme') === 'light') {
+                document.documentElement.setAttribute('data-theme', 'light');
+            }
+        } catch (e) {}
+    })();
+</script>
+</head>
+<body>
+    <!-- Subtle background texture -->
+    <div class="bg-texture"></div>
+
+    <!-- 标准主导航：与主站完全一致，链接回主站对应路由 -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="index.html#/" class="nav-logo">
+                <div class="logo-mark">
+                    <img src="images/logo.png" alt="LIERXIN 利尔鑫" class="logo-img">
+                </div>
+                <div class="logo-text">
+                    <span class="logo-en">LIERXIN</span>
+                    <span class="logo-cn">利尔鑫</span>
+                </div>
+            </a>
+            <ul class="nav-menu" id="navMenu">
+                <li><a href="index.html#/" class="nav-link" data-page="home">首页</a></li>
+                <li><a href="index.html#/products" class="nav-link" data-page="products">产品中心</a></li>
+                <li><a href="index.html#/solutions" class="nav-link" data-page="solutions">行业方案</a></li>
+                <li><a href="index.html#/about" class="nav-link" data-page="about">关于我们</a></li>
+                <li><a href="index.html#/news" class="nav-link" data-page="news">资讯中心</a></li>
+                <li><a href="index.html#/contact" class="nav-link" data-page="contact">联系我们</a></li>
+            </ul>
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="切换深浅色主题" title="切换深浅色主题">
+                    <svg class="tt-icon tt-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>
+                    </svg>
+                    <svg class="tt-icon tt-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="12" cy="12" r="4"/>
+                        <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+                    </svg>
+                </button>
+                <a href="#quoteForm" class="nav-cta" id="navQuote">获取报价</a>
+                <button class="nav-toggle" id="navToggle" aria-label="菜单">
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+<main class="q-main">
+
+    <section class="q-hero">
+        <div class="q-hero-inner">
+            <div class="eyebrow">DIRECT QUOTE</div>
+            <h1>PCB <span class="text-gold">在线报价</span>系统</h1>
+            <p>选择尺寸、层数与工艺参数，系统实时估算价格与交期。提交后由工程团队 2 小时内确认最终报价。</p>
+        </div>
+    </section>
+
+    <div class="q-layout">
+
+        <!-- ============ 左：参数表单 ============ -->
+        <div class="q-form">
+
+            <!-- 步骤 1 -->
+            <section class="q-card">
+                <div class="q-card-head">
+                    <span class="q-step">01</span>
+                    <h2>PCB 基本信息</h2>
+                </div>
+
+                <div class="q-grid">
+                    <div class="q-field">
+                        <label>板子长度 <span class="q-unit">cm</span></label>
+                        <input type="number" id="fLength" class="q-input" value="10" min="1" max="120" step="0.1">
+                    </div>
+                    <div class="q-field">
+                        <label>板子宽度 <span class="q-unit">cm</span></label>
+                        <input type="number" id="fWidth" class="q-input" value="10" min="1" max="120" step="0.1">
+                    </div>
+                    <div class="q-field">
+                        <label>数量 <span class="q-unit">pcs（须为 5 的倍数）</span></label>
+                        <input type="number" id="fQty" class="q-input" value="100" min="5" max="100000" step="5">
+                    </div>
+                    <div class="q-field">
+                        <label>拼板款数 <span class="q-unit">款</span></label>
+                        <input type="number" id="fVariety" class="q-input" value="1" min="1" max="50" step="1">
+                    </div>
+                    <div class="q-field">
+                        <label>板子层数</label>
+                        <select id="fLayer" class="q-input">
+                            <option value="1">1 层（单面板）</option>
+                            <option value="2" selected>2 层（双面板）</option>
+                            <option value="4">4 层板</option>
+                            <option value="6">6 层板</option>
+                            <option value="8">8 层板</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>板材类型</label>
+                        <select id="fMaterial" class="q-input">
+                            <option value="fr4a" selected>FR-4 A级</option>
+                            <option value="fr4kb">FR-4 KB料</option>
+                            <option value="aluminum">铝基板</option>
+                            <option value="rogers">高频板材（Rogers）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>出货方式</label>
+                        <select id="fDelivery" class="q-input">
+                            <option value="single" selected>单片（单 PCS 出货）</option>
+                            <option value="panel-customer">拼板（客户自拼）</option>
+                            <option value="panel-factory">拼板（利尔鑫代拼）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>板子厚度 <span class="q-unit">mm</span></label>
+                        <select id="fThickness" class="q-input">
+                            <option value="0.6">0.6</option>
+                            <option value="0.8">0.8</option>
+                            <option value="1.0">1.0</option>
+                            <option value="1.2">1.2</option>
+                            <option value="1.6" selected>1.6</option>
+                            <option value="2.0">2.0</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 步骤 2 -->
+            <section class="q-card">
+                <div class="q-card-head">
+                    <span class="q-step">02</span>
+                    <h2>PCB 工艺信息</h2>
+                </div>
+
+                <div class="q-grid">
+                    <div class="q-field">
+                        <label>成品铜厚</label>
+                        <select id="fCopper" class="q-input">
+                            <option value="1" selected>1 oz（不加价）</option>
+                            <option value="2">2 oz（+150 元/㎡）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>阻焊颜色</label>
+                        <select id="fSolder" class="q-input">
+                            <option value="green" selected>绿色（常规）</option>
+                            <option value="white">白色（+10 元/㎡）</option>
+                            <option value="black">黑色（+10 元/㎡）</option>
+                            <option value="blue">蓝色（+10 元/㎡）</option>
+                            <option value="yellow">黄色（+10 元/㎡）</option>
+                            <option value="red">红色（+10 元/㎡）</option>
+                            <option value="matte-black">哑黑（+10 元/㎡）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>字符设计</label>
+                        <select id="fSilk" class="q-input">
+                            <option value="single" selected>单面字符</option>
+                            <option value="double">双面字符（+5 元/㎡）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>表面处理</label>
+                        <select id="fSurface" class="q-input">
+                            <option value="hasl" selected>有铅喷锡（不加价）</option>
+                            <option value="hasl-lf">无铅喷锡（+20 元/㎡）</option>
+                            <option value="enig">沉金 1U（+180 元/㎡）</option>
+                            <option value="osp">OSP（-5 元/㎡）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>过孔处理</label>
+                        <select id="fVia" class="q-input">
+                            <option value="tented" selected>盖油</option>
+                            <option value="open">开窗</option>
+                            <option value="filled">塞油（+20 元/㎡）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>测试方式</label>
+                        <select id="fTest" class="q-input">
+                            <option value="visual" selected>目测（良率约 98%）</option>
+                            <option value="flying">飞针测试（50 元/㎡）</option>
+                            <option value="fixture">电测测试架（500~1000 元）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>成型方式</label>
+                        <select id="fShape" class="q-input">
+                            <option value="route-quad" selected>铣边 - 四边形（免费）</option>
+                            <option value="route-irregular">铣边 - 非四边形</option>
+                            <option value="punch">模冲（模具费另计）</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 步骤 3 -->
+            <section class="q-card">
+                <div class="q-card-head">
+                    <span class="q-step">03</span>
+                    <h2>特殊选项</h2>
+                </div>
+
+                <div class="q-field q-field-full">
+                    <label>特殊工艺（可多选，没有可不选）</label>
+                    <div class="q-checks" id="fSpecial">
+                        <label class="q-check"><input type="checkbox" value="half-hole"> 半孔（+100 元/款）</label>
+                        <label class="q-check"><input type="checkbox" value="bevel"> 45°斜边（+150 元/款）</label>
+                        <label class="q-check"><input type="checkbox" value="impedance"> 阻抗控制（+200 元/款）</label>
+                        <label class="q-check"><input type="checkbox" value="bga"> BGA（+50 元/款）</label>
+                        <label class="q-check"><input type="checkbox" value="via-fill"> 树脂塞孔（+300 元/款）</label>
+                        <label class="q-check"><input type="checkbox" value="edge-metal"> 金属包边（+300 元/款）</label>
+                    </div>
+                </div>
+
+                <div class="q-grid">
+                    <div class="q-field">
+                        <label>印周期</label>
+                        <select id="fDateCode" class="q-input">
+                            <option value="none" selected>不印周期</option>
+                            <option value="yw">年周（+30 元/款）</option>
+                            <option value="ymd">年月日（+30 元/款）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>检验报告</label>
+                        <select id="fReport" class="q-input">
+                            <option value="none" selected>不需要</option>
+                            <option value="coc">出货报告（+50 元/款）</option>
+                            <option value="fai">样品承认书（+150 元/款）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>发票</label>
+                        <select id="fInvoice" class="q-input">
+                            <option value="0" selected>暂不需要发票</option>
+                            <option value="1">需要增值税发票（+13%）</option>
+                        </select>
+                    </div>
+                    <div class="q-field">
+                        <label>快递方式</label>
+                        <select id="fShip" class="q-input">
+                            <option value="0" selected>顺丰到付（0 元）</option>
+                            <option value="1">顺丰寄付（+25 元）</option>
+                        </select>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 提交询价 -->
+            <section class="q-card">
+                <div class="q-card-head">
+                    <span class="q-step">04</span>
+                    <h2>提交询价</h2>
+                </div>
+
+                <form id="quoteForm" class="q-grid" novalidate>
+                    <div class="q-field">
+                        <label>您的姓名 *</label>
+                        <input type="text" id="qName" class="q-input" maxlength="50" placeholder="请输入姓名" required>
+                    </div>
+                    <div class="q-field">
+                        <label>联系电话 *</label>
+                        <input type="tel" id="qPhone" class="q-input" maxlength="30" placeholder="请输入手机号" required>
+                    </div>
+                    <div class="q-field">
+                        <label>电子邮箱</label>
+                        <input type="email" id="qEmail" class="q-input" maxlength="120" placeholder="选填">
+                    </div>
+                    <div class="q-field">
+                        <label>公司名称</label>
+                        <input type="text" id="qCompany" class="q-input" maxlength="120" placeholder="选填">
+                    </div>
+                    <div class="q-field q-field-full">
+                        <label>备注</label>
+                        <textarea id="qRemark" class="q-input q-textarea" maxlength="1000"
+                                  placeholder="如：阻抗要求、特殊认证、交期要求等"></textarea>
+                    </div>
+                    <div class="q-field q-field-full">
+                        <label>验证码 *</label>
+                        <div class="q-captcha">
+                            <input type="text" id="qCaptcha" class="q-input" maxlength="4" autocomplete="off" placeholder="请输入右侧验证码" required>
+                            <img id="qCaptchaImg" src="api/captcha.php" alt="验证码" title="看不清？点击刷新">
+                        </div>
+                    </div>
+                    <div class="q-field q-field-full">
+                        <button type="submit" class="q-submit" id="qSubmit">提交询价</button>
+                        <div class="q-status" id="qStatus" role="alert" aria-live="polite"></div>
+                        <p class="q-tip">提交后系统会把以上参数一并发送，工程团队 2 小时内与您确认最终报价与交期。</p>
+                    </div>
+                </form>
+            </section>
+        </div>
+
+        <!-- ============ 右：实时价格明细 ============ -->
+        <aside class="q-summary">
+            <div class="q-summary-card">
+                <h3>价格明细</h3>
+                <div class="q-total">
+                    <span class="q-total-label">估算总计</span>
+                    <span class="q-total-value">￥<b id="sTotal">0</b></span>
+                </div>
+                <div class="q-total-sub">
+                    单片约 ￥<b id="sUnit">0</b> · 预计交期 <b id="sLead">—</b>
+                </div>
+
+                <ul class="q-lines" id="sLines">
+                    <li><span>面积</span><b id="sArea">0 ㎡</b></li>
+                    <li><span>重量（约）</span><b id="sWeight">0 kg</b></li>
+                    <li><span>每平方米单价</span><b id="sSqm">￥0</b></li>
+                    <li><span>板费</span><b id="sBoard">￥0</b></li>
+                    <li><span>工程费</span><b id="sSetup">￥0</b></li>
+                    <li><span>测试费</span><b id="sTest">￥0</b></li>
+                    <li><span>模具费</span><b id="sTooling">￥0</b></li>
+                    <li><span>附加费</span><b id="sExtra">￥0</b></li>
+                    <li><span>税费</span><b id="sTax">￥0</b></li>
+                    <li><span>快递费</span><b id="sShip">￥0</b></li>
+                </ul>
+
+                <div class="q-note" id="sNote">提示：单片出货尺寸小于 7.6×7.6cm 建议做拼板，效率更高、价格更优。</div>
+
+                <div class="q-actions">
+                    <a class="q-btn-primary" href="#quoteForm" id="qJumpForm">填写联系方式提交</a>
+                    <a class="q-btn-ghost" href="index.html#/contact">转为人工报价</a>
+                </div>
+            </div>
+        </aside>
+    </div>
+</main>
+
+<!-- 标准页脚：与主站一致 -->
+<footer class="footer">
+    <div class="footer-container">
+        <div class="footer-grid">
+            <div class="footer-col footer-brand">
+                <div class="footer-logo">
+                    <img src="images/logo.png" alt="LIERXIN 利尔鑫" class="footer-logo-img">
+                    <span>利尔鑫</span>
+                </div>
+                <p class="footer-desc">国家高新技术企业，集PCB线路板制造、PCBA贴装组装及电子产品方案研发于一体，致力于为全球客户提供从概念设计到批量交付的一站式ODM/OEM定制解决方案。</p>
+                <div class="footer-cert">
+                    <span class="cert-badge">ISO 9001</span>
+                    <span class="cert-badge">IATF 16949</span>
+                    <span class="cert-badge">ISO 13485</span>
+                    <span class="cert-badge">国家高新企业</span>
+                    <span class="cert-badge">绿色工厂</span>
+                </div>
+            </div>
+            <div class="footer-col">
+                <h4>产品中心</h4>
+                <ul>
+                    <li><a href="index.html#/products">HDI线路板</a></li>
+                    <li><a href="index.html#/products">多层PCB板</a></li>
+                    <li><a href="index.html#/products">PCBA贴装组装</a></li>
+                    <li><a href="index.html#/products">软硬结合板</a></li>
+                    <li><a href="index.html#/products">高频高速板</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>行业方案</h4>
+                <ul>
+                    <li><a href="index.html#/solutions">汽车电子</a></li>
+                    <li><a href="index.html#/solutions">通讯设备</a></li>
+                    <li><a href="index.html#/solutions">工业控制</a></li>
+                    <li><a href="index.html#/solutions">医疗电子</a></li>
+                    <li><a href="index.html#/solutions">消费电子</a></li>
+                </ul>
+            </div>
+            <div class="footer-col">
+                <h4>关于我们</h4>
+                <ul>
+                    <li><a href="index.html#/about">公司简介</a></li>
+                    <li><a href="index.html#/news">资讯中心</a></li>
+                    <li><a href="index.html#/contact">联系我们</a></li>
+                </ul>
+            </div>
+            <div class="footer-col footer-contact">
+                <h4>联系方式</h4>
+                <ul class="contact-list">
+                    <li><span class="ci-label">电话</span> 13823580291</li>
+                    <li><span class="ci-label">邮箱</span> selina@szlierpcb.com</li>
+                    <li><span class="ci-label">地址</span> 深圳市宝安区新桥街道新二社区南岭路23号</li>
+                </ul>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>© 2024 深圳利尔鑫实业有限公司 Shenzhen Lerxin Industrial Co., Ltd. 版权所有</p>
+            <p class="footer-icp"><a href="https://beian.miit.gov.cn/" target="_blank" rel="noopener">粤ICP备2026146057号-1</a></p>
+        </div>
+    </div>
+</footer>
+
+<!-- 右下角浮动操作：返回顶部（本页已是报价页，不再重复放「获取报价」） -->
+<div class="float-actions" id="floatActions">
+    <button class="scroll-top" id="scrollTop" aria-label="返回顶部">
+        <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+            <path d="M10 4l6 6-1.5 1.5L11 7.5V16H9V7.5L5.5 11L4 9.5l6-6z" fill="currentColor"/>
+        </svg>
+    </button>
+</div>
+
+<script src="js/app.js?v=20261007"></script>
+<script src="js/quote.js?v=20261007"></script>
+</body>
+</html>

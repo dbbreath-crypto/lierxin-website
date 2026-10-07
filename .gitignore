@@ -2,3 +2,9 @@
 Thumbs.db
 *.log
 node_modules/
+
+# 本地开发标记（存在时自动切换到本地数据库配置）
+.local
+
+# 数据库凭据（含生产环境账号密码，严禁入库）
+config.php
